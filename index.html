@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -205,6 +205,21 @@
       display: block;
       color: var(--primary-dark);
       margin-bottom: 6px;
+    }
+
+
+    .study-tip {
+      margin-top: 18px;
+      background: linear-gradient(135deg, #eff6ff, #faf5ff);
+      border: 1px solid #bfdbfe;
+      border-radius: 20px;
+      padding: 16px;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    .study-tip strong {
+      color: var(--primary-dark);
     }
 
     .progress-area {
@@ -633,8 +648,8 @@
           <span class="pill">A1-A2 Vocabulary Practice</span>
           <h2>Practice house vocabulary in Spanish.</h2>
           <p style="margin-top: 12px; color: var(--muted); line-height: 1.7;">
-            This activity helps beginner and early-intermediate students recognize common house vocabulary in Spanish.
-            The questions include English references, rooms, furniture, objects, and simple article practice. Visual clues appear only when they clearly help.
+            This polished activity helps beginner and early-intermediate students recognize and use common house vocabulary in Spanish.
+            The questions include English references, rooms, furniture, objects, and simple article practice. Visual clues appear only when they clearly help, and multiple-choice options are randomized every time.
           </p>
 
           <div class="intro-grid">
@@ -658,6 +673,12 @@
               <strong>Instant feedback</strong>
               Correct answers are clearly marked as correct.
             </div>
+          </div>
+
+
+          <div class="study-tip">
+            <strong>Study tip:</strong> Read the Spanish sentence first, then use the English reference only as support.
+            For A1-A2 students, this helps connect vocabulary with real context instead of memorizing isolated words.
           </div>
 
           <button class="btn-primary" id="startBtn">Start</button>
@@ -1537,7 +1558,13 @@
     }
 
     function startQuiz() {
-      questions = shuffleArray(originalQuestions);
+      questions = shuffleArray(originalQuestions).map(question => {
+        const copy = { ...question };
+        if (copy.options && Array.isArray(copy.options)) {
+          copy.options = shuffleArray(copy.options);
+        }
+        return copy;
+      });
       currentIndex = 0;
       answers = questions.map(() => ({
         value: "",
@@ -1700,7 +1727,7 @@
       } else {
         feedbackBox.className = "feedback incorrect show";
         feedbackBox.innerHTML = `
-          <strong>Not quite. Try again.</strong>
+          <strong>Not quite. Review the clue and try again.</strong>
           <p>The correct answer is: <strong>${q.answer}</strong>.</p>
           <p>${q.explanation}</p>
         `;
